@@ -3,7 +3,7 @@ const { execSync } = require('child_process');
 class GitHashWebpackPlugin {
   constructor(options = {}) {
     this.defaultOptions = {
-      len: 11,
+      len: 0,
       webpack: null,
     };
     this.options = {
@@ -13,7 +13,7 @@ class GitHashWebpackPlugin {
   }
 
   initDefinePlugin(ctx, options) {
-    if (options.plugins) {
+    if (!options.plugins) {
       options.plugins = [];
     }
 
@@ -25,8 +25,11 @@ class GitHashWebpackPlugin {
     options.plugins.push(new ctx.DefinePlugin({}));
   }
 
-  initDefineHash(ctx, options) {
-    const hash = this.getGitCommitId();
+  injectDefineHash(ctx, options) {
+    const hash = this.getGitCommitId().slice(
+      0,
+      this.options.len ? this.options.len : -1
+    );
 
     options.plugins.forEach((plugin) => {
       if (plugin instanceof ctx.DefinePlugin) {
@@ -46,9 +49,7 @@ class GitHashWebpackPlugin {
 
   getGitCommitId() {
     try {
-      return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(
-        this.options.len
-      );
+      return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
     } catch (error) {
       console.error('git commit error', error);
       return '';
@@ -57,10 +58,12 @@ class GitHashWebpackPlugin {
 
   apply(compiler) {
     const name = GitHashWebpackPlugin.name;
-    const { webpack, options } = compiler;
+    let { webpack, options } = compiler;
+
     if (!webpack && this.options.webpack) {
       webpack = this.options.webpack;
     }
+
     this.initDefinePlugin(webpack, options);
     compiler.hooks.beforeCompile.tap(name, () => {
       this.injectDefineHash(webpack, options);
@@ -68,4 +71,4 @@ class GitHashWebpackPlugin {
   }
 }
 
-module.exports = GitHashWebpackPlugin
+module.exports = GitHashWebpackPlugin;
