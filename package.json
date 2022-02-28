@@ -1,6 +1,6 @@
 {
   "name": "git-hash-webpack-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Add variable to process.env.COMMIT",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,6 @@
     "url": "git+https://github.com/alanuuu/git-hash-webpack-plugin.git"
   },
   "keywords": [
-    "webpack",
     "git",
     "commit",
     "hash",
@@ -22,7 +21,7 @@
     "webpack": "^5.44.0",
     "webpack-cli": "^4.7.2"
   },
-  "author": "",
+  "author": "alanuuu",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/alanuuu/git-hash-webpack-plugin/issues"
