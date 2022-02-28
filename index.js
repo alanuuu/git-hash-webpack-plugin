@@ -56,7 +56,7 @@ class GitHashWebpackPlugin {
   }
 
   apply(compiler) {
-    const name = this.name;
+    const name = GitHashWebpackPlugin.name;
     const { webpack, options } = compiler;
     if (!webpack && this.options.webpack) {
       webpack = this.options.webpack;
