@@ -1,5 +1,4 @@
-const { execSync } = require('child_process');
-
+const { getGitCommitId } = require('./helper');
 class GitHashWebpackPlugin {
   constructor(options = {}) {
     this.defaultOptions = {
@@ -26,7 +25,7 @@ class GitHashWebpackPlugin {
   }
 
   injectDefineHash(ctx, options) {
-    const hash = this.getGitCommitId().slice(
+    const hash = getGitCommitId().slice(
       0,
       this.options.len ? this.options.len : -1
     );
@@ -45,15 +44,6 @@ class GitHashWebpackPlugin {
         }
       }
     });
-  }
-
-  getGitCommitId() {
-    try {
-      return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    } catch (error) {
-      console.error('git commit error', error);
-      return '';
-    }
   }
 
   apply(compiler) {
